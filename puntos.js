@@ -1,18 +1,20 @@
+const PESOS_POR_PUNTO = 1000;
+const MULTIPLICADOR_POR_CATEGORIA = new Map([
+  ['ESTANDAR', 1],
+  ['ORO', 2],
+]);
+
 function calcularPuntos(total, categoria) {
   if (!Number.isFinite(total) || total < 0) {
     throw new Error('El total debe ser un número mayor o igual a 0');
   }
 
-  if (categoria !== 'ESTANDAR' && categoria !== 'ORO') {
+  const multiplicador = MULTIPLICADOR_POR_CATEGORIA.get(categoria);
+  if (multiplicador === undefined) {
     throw new Error('La categoría debe ser ESTANDAR u ORO');
   }
 
-  const puntosBase = Math.floor(total / 1000);
-  if (categoria === 'ORO') {
-    return puntosBase * 2;
-  }
-
-  return puntosBase;
+  return Math.floor(total / PESOS_POR_PUNTO) * multiplicador;
 }
 
 module.exports = { calcularPuntos };
