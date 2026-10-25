@@ -1,4 +1,4 @@
-function calcularEnvio(municipio, valorProductosConIVA) {
+function calcularEnvio(municipio, valorProductosConIVA, envioGratisPorCupon = false) {
   if (typeof municipio !== 'string' || municipio.trim() === '') {
     throw new Error('El municipio es obligatorio');
   }
@@ -9,7 +9,7 @@ function calcularEnvio(municipio, valorProductosConIVA) {
     );
   }
 
-  if (valorProductosConIVA >= 150000) {
+  if (envioGratisPorCupon || valorProductosConIVA >= 150000) {
     return 0;
   }
 
