@@ -2,25 +2,28 @@ const { calcularDescuentoVolumen } = require('./descuentoVolumen');
 
 describe('HU-03: Calcular descuento por volumen', () => {
   test.each([
-    [0, 0],
-    [0, 199999],
-    [5, 200000],
-    [5, 499999],
-    [10, 500000],
-  ])('aplica el descuento de %i%% al subtotal de %i', (tarifa, subtotal) => {
-    // Arrange
-    const compra = subtotal;
+    [0, 0, 0, 0],
+    [0, 199999, 0, 199999],
+    [5, 200000, 10000, 190000],
+    [5, 200010, 10001, 190009],
+    [5, 499999, 25000, 474999],
+    [10, 500000, 50000, 450000],
+    [10, 500005, 50001, 450004],
+  ])(
+    'aplica %i%% y calcula importes enteros para subtotal %i',
+    (tarifa, subtotal, descuentoEsperado, totalEsperado) => {
+      // Arrange
+      const compra = subtotal;
 
-    // Act
-    const resultado = calcularDescuentoVolumen(compra);
+      // Act
+      const resultado = calcularDescuentoVolumen(compra);
 
-    // Assert
-    expect(resultado.tarifa).toBe(tarifa);
-    expect(resultado.descuento).toBe((subtotal * tarifa) / 100);
-    expect(resultado.totalConDescuento).toBe(
-      subtotal - (subtotal * tarifa) / 100
-    );
-  });
+      // Assert
+      expect(resultado.tarifa).toBe(tarifa);
+      expect(resultado.descuento).toBe(descuentoEsperado);
+      expect(resultado.totalConDescuento).toBe(totalEsperado);
+    }
+  );
 
   test('rechaza un subtotal negativo', () => {
     // Arrange

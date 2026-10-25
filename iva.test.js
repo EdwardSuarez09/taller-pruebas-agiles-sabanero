@@ -29,6 +29,24 @@ describe('HU-02: Calcular el IVA', () => {
     expect(resultado).toBe(32490);
   });
 
+  test.each([
+    [101, 5, 0, 5],
+    [111, 5, 0, 6],
+    [111, 19, 5, 20],
+  ])(
+    'redondea al peso más cercano el IVA de precio %i, tarifa %i%% y descuento %i%%',
+    (precio, tarifa, descuento, ivaEsperado) => {
+      // Arrange
+      // Los resultados esperados son importes explícitos, independientes de la fórmula.
+
+      // Act
+      const resultado = calcularIVA(precio, tarifa, descuento);
+
+      // Assert
+      expect(resultado).toBe(ivaEsperado);
+    }
+  );
+
   test('rechaza una tarifa de IVA no permitida', () => {
     // Arrange
     const precio = 100000;
@@ -51,5 +69,16 @@ describe('HU-02: Calcular el IVA', () => {
 
     // Assert
     expect(accion).toThrow('El descuento debe estar entre 0 y 100');
+  });
+
+  test('rechaza precios negativos', () => {
+    // Arrange
+    const precioNegativo = -1;
+
+    // Act
+    const accion = () => calcularIVA(precioNegativo, 19);
+
+    // Assert
+    expect(accion).toThrow('El precio debe ser un número mayor o igual a 0');
   });
 });

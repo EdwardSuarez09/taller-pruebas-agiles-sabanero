@@ -87,4 +87,35 @@ describe('HU-01: Agregar productos al carrito', () => {
     // Assert
     expect(accion).toThrow('Se requiere un servicio de inventario válido');
   });
+
+  test('rechaza un producto sin identificador y no consulta el inventario', () => {
+    // Arrange
+    const { carrito, mockInventario } = crearCarrito();
+    const producto = { nombre: 'Producto sin id', precio: 1000 };
+
+    // Act
+    const accion = () => carrito.agregarProducto(producto, 1);
+
+    // Assert
+    expect(accion).toThrow('El producto debe tener un id');
+    expect(mockInventario.obtenerStock).not.toHaveBeenCalled();
+  });
+
+  test.each([Number.NaN, -1])(
+    'rechaza un stock inválido de %s sin modificar el carrito',
+    (stock) => {
+      // Arrange
+      const { carrito } = crearCarrito(stock);
+      const producto = { id: 4, nombre: 'Arroz', precio: 4500 };
+
+      // Act
+      const accion = () => carrito.agregarProducto(producto, 1);
+
+      // Assert
+      expect(accion).toThrow(
+        'El servicio de inventario devolvió un stock inválido'
+      );
+      expect(carrito.obtenerCantidad(4)).toBe(0);
+    }
+  );
 });
