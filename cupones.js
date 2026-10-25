@@ -3,13 +3,15 @@ const CUPONES = {
   ENVIOGRATIS: { tipo: 'envio', estado: 'vigente' },
 };
 
+const conEnvio = (volumen, envioGratis) => ({ ...volumen, envioGratis });
+
 function aplicarCupon(codigo, subtotal, volumen, catalogo = CUPONES) {
   if (!Number.isFinite(subtotal) || subtotal < 0) {
     throw new Error('El subtotal debe ser un número mayor o igual a 0');
   }
 
   if (codigo === undefined || codigo === null) {
-    return { ...volumen, envioGratis: false };
+    return conEnvio(volumen, false);
   }
 
   const cupon = catalogo[codigo];
@@ -18,7 +20,7 @@ function aplicarCupon(codigo, subtotal, volumen, catalogo = CUPONES) {
   }
 
   if (cupon.tipo === 'envio') {
-    return { ...volumen, envioGratis: true };
+    return conEnvio(volumen, true);
   }
 
   if (subtotal < cupon.subtotalMinimo) {
@@ -37,7 +39,7 @@ function aplicarCupon(codigo, subtotal, volumen, catalogo = CUPONES) {
     };
   }
 
-  return { ...volumen, envioGratis: false };
+  return conEnvio(volumen, false);
 }
 
 module.exports = { aplicarCupon };
