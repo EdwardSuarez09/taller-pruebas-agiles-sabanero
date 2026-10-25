@@ -48,4 +48,67 @@ describe('HU-04: Usar cupones', () => {
       expect(resultado.descuento).toBe(descuentoEsperado);
     }
   );
+  test('ENVIOGRATIS deja el envío gratis y conserva el descuento por volumen', () => {
+    // Arrange
+    const subtotal = 200000;
+    const volumen = calcularDescuentoVolumen(subtotal);
+
+    // Act
+    const resultado = aplicarCupon('ENVIOGRATIS', subtotal, volumen);
+
+    // Assert
+    expect(resultado.envioGratis).toBe(true);
+    expect(resultado.descuento).toBe(10000);
+  });
+
+  test('rechaza un cupón inexistente con error de cupón inválido', () => {
+    // Arrange
+    const subtotal = 100000;
+    const volumen = calcularDescuentoVolumen(subtotal);
+
+    // Act
+    const accion = () => aplicarCupon('NOEXISTE', subtotal, volumen);
+
+    // Assert
+    expect(accion).toThrow('Cupón inválido');
+  });
+
+  test('rechaza un cupón vencido con error de cupón inválido', () => {
+    // Arrange
+    const subtotal = 100000;
+    const volumen = calcularDescuentoVolumen(subtotal);
+    const catalogo = {
+      VIEJO10: { tipo: 'porcentaje', valor: 10, subtotalMinimo: 0, estado: 'vencido' },
+    };
+
+    // Act
+    const accion = () => aplicarCupon('VIEJO10', subtotal, volumen, catalogo);
+
+    // Assert
+    expect(accion).toThrow('Cupón inválido');
+  });
+
+  test('sin cupón conserva el descuento por volumen y cobra el envío', () => {
+    // Arrange
+    const subtotal = 228000;
+    const volumen = calcularDescuentoVolumen(subtotal);
+
+    // Act
+    const resultado = aplicarCupon(undefined, subtotal, volumen);
+
+    // Assert
+    expect(resultado.descuento).toBe(11400);
+    expect(resultado.envioGratis).toBe(false);
+  });
+
+  test('rechaza un subtotal negativo', () => {
+    // Arrange
+    const volumen = { tarifa: 0, descuento: 0, totalConDescuento: 0 };
+
+    // Act
+    const accion = () => aplicarCupon('SABANERO10', -1, volumen);
+
+    // Assert
+    expect(accion).toThrow('El subtotal debe ser un número mayor o igual a 0');
+  });
 });
