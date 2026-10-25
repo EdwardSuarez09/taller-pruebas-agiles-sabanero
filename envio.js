@@ -1,3 +1,8 @@
+const MUNICIPIO_BASE = 'Sincelejo';
+const ENVIO_MUNICIPIO_BASE = 8000;
+const ENVIO_OTROS_MUNICIPIOS = 15000;
+const MINIMO_ENVIO_GRATIS = 150000;
+
 function calcularEnvio(municipio, valorProductosConIVA, envioGratisPorCupon = false) {
   if (typeof municipio !== 'string' || municipio.trim() === '') {
     throw new Error('El municipio es obligatorio');
@@ -9,15 +14,13 @@ function calcularEnvio(municipio, valorProductosConIVA, envioGratisPorCupon = fa
     );
   }
 
-  if (envioGratisPorCupon || valorProductosConIVA >= 150000) {
+  if (envioGratisPorCupon || valorProductosConIVA >= MINIMO_ENVIO_GRATIS) {
     return 0;
   }
 
-  if (municipio.trim() === 'Sincelejo') {
-    return 8000;
-  }
-
-  return 15000;
+  return municipio.trim() === MUNICIPIO_BASE
+    ? ENVIO_MUNICIPIO_BASE
+    : ENVIO_OTROS_MUNICIPIOS;
 }
 
 module.exports = { calcularEnvio };
