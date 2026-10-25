@@ -35,4 +35,36 @@ describe('HU-06: Acumular puntos', () => {
       expect(accion).toThrow('El total debe ser un número mayor o igual a 0');
     }
   );
+  test.each([
+    [999, 0],
+    [1000, 2],
+    [1999, 2],
+    [250515, 500],
+  ])(
+    'cliente ORO con un total sin envío de %i recibe %i puntos (el doble)',
+    (total, puntosEsperados) => {
+      // Arrange
+      const categoria = 'ORO';
+
+      // Act
+      const puntos = calcularPuntos(total, categoria);
+
+      // Assert
+      expect(puntos).toBe(puntosEsperados);
+    }
+  );
+
+  test.each([['PLATA'], [undefined], ['oro']])(
+    'rechaza una categoría de cliente no permitida (%p)',
+    (categoria) => {
+      // Arrange
+      const total = 50000;
+
+      // Act
+      const accion = () => calcularPuntos(total, categoria);
+
+      // Assert
+      expect(accion).toThrow('La categoría debe ser ESTANDAR u ORO');
+    }
+  );
 });
