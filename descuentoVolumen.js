@@ -10,7 +10,7 @@ function calcularDescuentoVolumen(subtotal) {
     tarifa = 5;
   }
 
-  const descuento = (subtotal * tarifa) / 100;
+  const descuento = Math.round((subtotal * tarifa) / 100);
 
   return {
     tarifa,
