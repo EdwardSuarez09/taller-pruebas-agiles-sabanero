@@ -71,4 +71,15 @@ describe('HU-05: Calcular el envío', () => {
       );
     }
   );
+  test('el cupón ENVIOGRATIS deja el envío en 0 en otro municipio', () => {
+    // Arrange
+    const municipio = 'Corozal';
+    const envioGratisPorCupon = true;
+
+    // Act
+    const envio = calcularEnvio(municipio, 100000, envioGratisPorCupon);
+
+    // Assert
+    expect(envio).toBe(0);
+  });
 });
