@@ -51,5 +51,5 @@ El resumen sale en la terminal y el reporte en HTML queda en `coverage/lcov-repo
 Cada historia se desarrolló con TDD: un commit test: con la prueba en rojo, un commit feat: con el código mínimo que la pasa y, cuando hubo una mejora real, un commit refactor:.
 
 ## Equipo
-- Eduar Suárez: HU-01, HU-02 y HU-03
-- Ireth: HU-04, HU-05 y HU-06
+- Eduar Suarez: HU-01, HU-02 y HU-03
+- Ireth Franco: HU-04, HU-05 y HU-06
