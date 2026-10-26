@@ -24,12 +24,10 @@ function aplicarCupon(codigo, subtotal, volumen, catalogo = CUPONES) {
   }
 
   if (subtotal < cupon.subtotalMinimo) {
-    throw new Error(
-      `El cupón ${codigo} requiere un subtotal mínimo de ${cupon.subtotalMinimo}`
-    );
+    throw new Error(`El cupón ${codigo} requiere un subtotal mínimo de ${cupon.subtotalMinimo}`);
   }
 
-  const descuentoCupon = (subtotal * cupon.valor) / 100;
+  const descuentoCupon = Math.round((subtotal * cupon.valor) / 100);
   if (descuentoCupon > volumen.descuento) {
     return {
       tarifa: cupon.valor,

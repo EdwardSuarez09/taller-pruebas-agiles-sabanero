@@ -14,7 +14,7 @@ function calcularIVA(precio, tarifa, descuento = 0) {
   }
 
   const precioConDescuento = precio * (1 - descuento / 100);
-  return (precioConDescuento * tarifa) / 100;
+  return Math.round((precioConDescuento * tarifa) / 100);
 }
 
 module.exports = { calcularIVA };
